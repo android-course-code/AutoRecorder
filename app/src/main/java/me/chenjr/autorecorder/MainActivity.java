@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         StopListening();
     }
 
-
+    /*在listener触发之后由handler调用,就是在传感器的值发生变化的时候会执行的功能模块*/
     public void onUpdate(Object obj) {
         float[] values = (float[]) obj;
         boolean isShake = false;
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //
 //            if (isShake) mHandler.sendEmptyMessage(MainHandler.AT_SHAKE);
-
+            /*将数据用消息传到handler里*/
             Message msg = Message.obtain();
             msg.obj = values;
             msg.what = MainHandler.AT_CHANGE;
