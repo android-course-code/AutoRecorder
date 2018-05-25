@@ -1,5 +1,6 @@
 package me.chenjr.autorecorder;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -107,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void setThresholdListener(View view) {
         threshold = Float.valueOf(et_threshold.getText().toString());
+    }
+
+    public void GoToRecord(View view) {
+        Intent intent = new Intent(this,RecoderActivity.class);
+        startActivity(intent);
     }
 
 
