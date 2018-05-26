@@ -7,26 +7,19 @@
     tools:context=".RecoderActivity">
 
     <Button
-        android:id="@+id/btn_start_record"
+        android:id="@+id/btn_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/start_record"
-
-        android:onClick="StartRecording"
-
+        android:onClick="doRecord"
          />
+
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stop_record"
-        app:layout_constraintLeft_toRightOf="@id/btn_start_record"
-        android:onClick="StopRecording"
-        />
-    <Button
+        android:id="@+id/btn_paly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/play_record"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_record"
+        app:layout_constraintTop_toBottomOf="@id/btn_record"
         android:onClick="PlayRecord"
         />
 
