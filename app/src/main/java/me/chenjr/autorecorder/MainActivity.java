@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void GoToRecord(View view) {
-        Intent intent = new Intent(this,RecoderActivity.class);
+        Intent intent = new Intent(this,RecorderActivity.class);
         startActivity(intent);
     }
 
