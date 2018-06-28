@@ -24,7 +24,7 @@ import me.chenjr.autorecorder.fragment.HomePageFragment;
 import me.chenjr.autorecorder.fragment.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener  {
+        implements NavigationView.OnNavigationItemSelectedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +55,14 @@ public class MainActivity extends AppCompatActivity
 
     public void getPermission() {
         /* 如果没有权限则获取权限 */
-        String[] permissions = {Manifest.permission.READ_PHONE_STATE,Manifest.permission.PROCESS_OUTGOING_CALLS};
+        String[] permissions = {
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.PROCESS_OUTGOING_CALLS,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,permissions,1);
+            ActivityCompat.requestPermissions(this, permissions, 1);
         }
 
 
@@ -66,12 +70,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case 1:
-                if (grantResults.length <= 0 || grantResults[0] != 0 || grantResults[1] != 0) {
-                    Toast.makeText(this,"You denied permissions",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(this,"Yes!",Toast.LENGTH_SHORT).show();
+                if (grantResults.length <= 0 || grantResults[0] != 0 || grantResults[1] != 0||grantResults[2]!=0||grantResults[3]!=1) {
+                    Toast.makeText(this, "You denied permissions", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Yes!", Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -119,7 +123,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
 
-
         if (id == R.id.nav_home) {
             // Toast.makeText(this,"Show home page",Toast.LENGTH_SHORT).show();
             replaceFragment(new HomePageFragment());
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity
             // Toast.makeText(this,"Go to Settings.",Toast.LENGTH_SHORT).show();
             replaceFragment(new SettingsFragment());
 
-        }else if (id == R.id.nav_exit){
+        } else if (id == R.id.nav_exit) {
             finish();
         }
 
@@ -138,10 +141,11 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    private void replaceFragment(Fragment fragment){
+
+    private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.framelayout_content_home_page,fragment);
+        transaction.replace(R.id.framelayout_content_home_page, fragment);
         transaction.commit();
     }
 }

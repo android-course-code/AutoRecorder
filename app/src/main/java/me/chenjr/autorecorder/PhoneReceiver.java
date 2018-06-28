@@ -16,13 +16,14 @@ public class PhoneReceiver extends BroadcastReceiver {
             super.onCallStateChanged(state, incomingNumber);
             switch (state) {
                 case TelephonyManager.CALL_STATE_IDLE:
-                    System.out.println("挂断");
+                    Log.d("[RECEIVER]","挂断");
+
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:
-                    System.out.println("接听");
+                    Log.d("[RECEIVER]","接听");
                     break;
                 case TelephonyManager.CALL_STATE_RINGING:
-                    System.out.println("响铃:来电号码" + incomingNumber);
+                    Log.d("[RECEIVER]","响铃:来电号码" + incomingNumber);
                     // 输出来电号码
                     break;
             }
@@ -33,11 +34,11 @@ public class PhoneReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
-        System.out.println("action" + intent.getAction());
+        Log.d("[RECEIVER]","action" + intent.getAction());
         // 如果是去电
         if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
             String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-            Log.d("From Receiver!", "call OUT:" + phoneNumber);
+            Log.d("[RECEIVER]", "call OUT:" + phoneNumber);
         } else {
             // 查了下android文档，貌似没有专门用于接收来电的action,所以，非去电即来电.
             // 如果我们想要监听电话的拨打状况，需要这么几步 :

@@ -10,6 +10,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        getPreferenceManager().setSharedPreferencesName(getString(R.string.sharedpreference_filename));
         addPreferencesFromResource(R.xml.pref_settings);
     }
 }
