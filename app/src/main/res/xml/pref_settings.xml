@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="General">
+        <EditTextPreference
+            android:key="record_filename_prefix"
+            android:summary="The name prefix of record file."
+            android:title="Filename Prefix"
+            android:defaultValue="rec_"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:selectAllOnFocus="true"
+            />
+        <ListPreference
+            android:title="Max record length"
+            android:key="max_record_length"
+            android:entries="@array/max_length_title_list"
+            android:entryValues="@array/max_length_value_list"
+            android:defaultValue="300"
+            >
+
+        </ListPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Call">
+        <SwitchPreference
+            android:key="enable_call_auto_record"
+            android:title="Call recorder"
+            android:defaultValue="false"
+            android:summary="Enable auto record when calling."/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Shake"
+        >
+
+
+        <SwitchPreference
+            android:key="enable_shake_auto_record"
+            android:title="Shake Recorder"
+            android:defaultValue="false"
+            android:summary="Enable auto record when you shake your device."/>
+
+        <EditTextPreference
+            android:key="shake_threshold"
+            android:dependency="enable_shake_auto_record"
+            android:title="Shake threshold"
+            android:summary="The threshold of acceleration to judge shaking or not."
+            android:inputType="numberDecimal"
+            android:defaultValue="16.0"
+            android:maxLines="1"
+            android:singleLine="true"
+            />
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:id="@+id/frag_home_ll_shake_status_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toTopOf="@id/frag_home_btn_shake_service"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shake Service: "
+            android:textSize="20sp"
+            />
+        <me.chenjr.autorecorder.textview.StatusTextView
+            android:id="@+id/frag_home_tv_shake_status"
+            android:text="Running"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="20sp"
+            android:textColor="#00FF00"
+            />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/frag_checkbox_foreground_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start as foreground."
+        app:layout_constraintTop_toTopOf="@id/frag_home_btn_record_service"
+        app:layout_constraintBottom_toBottomOf="@id/frag_home_btn_record_service"
+        />
+
+    <me.chenjr.autorecorder.button.ServiceButton
+        android:id="@+id/frag_home_btn_shake_service"
+
+        app:layout_constraintTop_toBottomOf="@id/frag_home_ll_shake_status_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="Start service"
+
+
+        />
+    <LinearLayout
+        android:id="@+id/frag_home_ll_record_status_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/frag_home_btn_shake_service"
+        app:layout_constraintBottom_toTopOf="@id/frag_home_btn_record_service"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record Service: "
+            android:textSize="20sp"
+            />
+        <me.chenjr.autorecorder.textview.StatusTextView
+            android:id="@+id/frag_home_tv_record_status"
+            android:text="Recording"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="20sp"
+            android:textColor="#00FF00"
+            />
+    </LinearLayout>
+
+    <me.chenjr.autorecorder.button.ServiceButton
+        android:id="@+id/frag_home_btn_record_service"
+        app:layout_constraintTop_toBottomOf="@id/frag_home_ll_record_status_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="Start service"
+
+        />
+
+</android.support.constraint.ConstraintLayout>
