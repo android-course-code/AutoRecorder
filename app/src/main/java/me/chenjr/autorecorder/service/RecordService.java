@@ -26,6 +26,8 @@ public class RecordService extends Service {
     public static final String ACTION_INTENT_KEY = "doACTION";
     public static final String STATUS_INTENT_KEY = "Status";
     public static final String BROADCAST_STATUS_ACTION = "mr.recorder.RecordService.BROADCAST_STATUS";
+    public static final String EXTRA_FILE_PATH = "record_file_path";
+    public static final String EXTRA_PHONE_NUMBER = "call_phone_number";
     public static final int NO_ACTION = 0;
     public static final int START_RECORD = 1;
     public static final int STOP_RECORD = 2;
@@ -36,6 +38,8 @@ public class RecordService extends Service {
     public static final int STATUS_SERVICE_STARTED = 1;
     public static final int STATUS_SERVICE_FOREGROUND = 2;
     public static final int STATUS_RECORDING = 4;
+    public static final String FROM_CALL = "FROM_CALL";
+
 
     MediaRecorder mRecorder = null;
     private boolean isRecording = false;
@@ -45,6 +49,9 @@ public class RecordService extends Service {
     NotificationCompat.Builder notificationBuilder;
     SharedPreferences sp;
     private String currentFilePath;
+    private String currentFileName;
+
+
 
     @Override
     public void onCreate() {
@@ -108,8 +115,13 @@ public class RecordService extends Service {
         /* 开始录音 */
         if (isRecording) {
             /*若还在录音则先停止*/
-            Log.d("@stopRecord", "还在录音则先停止 ");
-            stopRecord();
+            Log.d("@startRecord", "还在录音则先停止 ");
+            try {
+                stopRecord();
+
+            }catch (java.lang.RuntimeException e){
+                e.printStackTrace();
+            }
 
         }
 
@@ -117,18 +129,13 @@ public class RecordService extends Service {
             mRecorder.release();
             mRecorder = null;
         }
-
+        Log.d("@startRecord", "----\"@startRecord\"---- ");
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        Date day = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("MMdd-HHmmss", Locale.getDefault());
-
-        currentFilePath = getExternalFilesDir("Record") + "/" +
-                sp.getString("record_filename_prefix", "mr_recorder_")
-                + df.format(day) + ".3gp";
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mRecorder.setOutputFile(currentFilePath);
+        mRecorder.setOnErrorListener(null);
         try {
             mRecorder.prepare();
         } catch (IOException e) {
@@ -143,12 +150,14 @@ public class RecordService extends Service {
 
     public void stopRecord() {
         Log.d("@stopRecord", "stopRecord: ");
+
         /* 停止当前录音 */
         if (isRecording) {
             Toast.makeText(getApplicationContext(), "Stop record.", Toast.LENGTH_SHORT).show();
             Log.d("@stopRecord", "stopRecord: isRecording ");
             if (mRecorder != null) {
                 mRecorder.stop();
+                mRecorder.reset();
                 mRecorder.release();
                 mRecorder = null;
             }
@@ -163,10 +172,25 @@ public class RecordService extends Service {
         int action;
 
         action = intent.getIntExtra(ACTION_INTENT_KEY, NO_ACTION);
+
         Log.d("@RecordService", "onStartCommand: "+action);
         switch (action) {
             case START_RECORD:
+                String phone_number = intent.getStringExtra(EXTRA_PHONE_NUMBER);
+                Date day = new Date();
+                SimpleDateFormat df = new SimpleDateFormat("MMdd-HHmmss-", Locale.getDefault());
+                String default_path = getExternalFilesDir("Record")
+                        + "/"
+                        + sp.getString("record_filename_prefix", "mr_recorder_")
+                        + df.format(day)
+                        + ((phone_number!=null)?phone_number:"" );
+
+                currentFilePath = default_path+ ".acc";
+                if (intent.getBooleanExtra(FROM_CALL, false) && (!sp.getBoolean("enable_call_auto_record", false))){
+                    break;
+                }
                 startRecord();
+
                 break;
             case STOP_RECORD:
                 stopRecord();

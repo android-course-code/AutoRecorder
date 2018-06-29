@@ -27,7 +27,7 @@
         <SwitchPreference
             android:key="enable_call_auto_record"
             android:title="Call recorder"
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:summary="Enable auto record when calling."/>
     </PreferenceCategory>
     <PreferenceCategory
