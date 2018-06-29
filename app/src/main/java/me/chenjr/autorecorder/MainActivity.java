@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case 1:
-                if (grantResults.length <= 0 || grantResults[0] != 0 || grantResults[1] != 0||grantResults[2]!=0||grantResults[3]!=1) {
+                if (grantResults.length <= 0 || grantResults[0] != 0 || grantResults[1] != 0||grantResults[2]!=0||grantResults[3]!=0) {
                     Toast.makeText(this, "You denied permissions", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Yes!", Toast.LENGTH_SHORT).show();

@@ -27,14 +27,7 @@
             />
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/frag_checkbox_foreground_record"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start as foreground."
-        app:layout_constraintTop_toTopOf="@id/frag_home_btn_record_service"
-        app:layout_constraintBottom_toBottomOf="@id/frag_home_btn_record_service"
-        />
+
 
     <me.chenjr.autorecorder.button.ServiceButton
         android:id="@+id/frag_home_btn_shake_service"
@@ -63,7 +56,7 @@
             android:textSize="20sp"
             />
         <me.chenjr.autorecorder.textview.StatusTextView
-            android:id="@+id/frag_home_tv_record_status"
+            android:id="@+id/frag_home_tv_record_service_status"
             android:text="Recording"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +77,7 @@
 
         />
 
-    <Button
+    <me.chenjr.autorecorder.button.ServiceButton
         android:id="@+id/frag_home_btn_record_ctrl"
         app:layout_constraintTop_toBottomOf="@id/frag_home_btn_record_service"
         android:layout_width="wrap_content"
