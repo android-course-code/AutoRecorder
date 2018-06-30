@@ -24,7 +24,7 @@ import me.chenjr.autorecorder.R;
 
 public class RecordService extends Service {
     public static final String ACTION_INTENT_KEY = "doACTION";
-    public static final String STATUS_INTENT_KEY = "Status";
+    public static final String STATUS_INTENT_KEY = "RecordServiceStatus";
     public static final String BROADCAST_STATUS_ACTION = "mr.recorder.RecordService.BROADCAST_STATUS";
     public static final String EXTRA_FILE_PATH = "record_file_path";
     public static final String EXTRA_PHONE_NUMBER = "call_phone_number";
@@ -35,6 +35,8 @@ public class RecordService extends Service {
     public static final int STOP_FOREGROUND = 8;
     public static final int STOP_SERVICE = 16;
     public static final int BROADCAST_STATUS = 32;
+    public static final int TOGGLE_RECORD = 64;
+
     public static final int STATUS_SERVICE_STARTED = 1;
     public static final int STATUS_SERVICE_FOREGROUND = 2;
     public static final int STATUS_RECORDING = 4;
@@ -50,6 +52,7 @@ public class RecordService extends Service {
     SharedPreferences sp;
     private String currentFilePath;
     private String currentFileName;
+    private  int counter=0;
 
 
 
@@ -175,6 +178,12 @@ public class RecordService extends Service {
 
         Log.d("@RecordService", "onStartCommand: "+action);
         switch (action) {
+            case TOGGLE_RECORD:
+                if (isRecording){
+                    stopRecord();
+                    break;
+                }
+                /* else goto next case */
             case START_RECORD:
                 String phone_number = intent.getStringExtra(EXTRA_PHONE_NUMBER);
                 Date day = new Date();
@@ -213,7 +222,11 @@ public class RecordService extends Service {
                 break;
         }
         broadcastStatus();
-        return super.onStartCommand(intent, flags, startId);
+
+        if (counter++!=0)
+            return super.onStartCommand(intent, flags, startId);
+        else
+            return START_STICKY_COMPATIBILITY;
     }
 
     private void broadcastStatus() {

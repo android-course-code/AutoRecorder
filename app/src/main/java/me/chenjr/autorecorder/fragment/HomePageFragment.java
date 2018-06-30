@@ -17,14 +17,18 @@ import android.widget.Button;
 import me.chenjr.autorecorder.R;
 import me.chenjr.autorecorder.button.ServiceButton;
 import me.chenjr.autorecorder.service.RecordService;
+import me.chenjr.autorecorder.service.ShakeService;
 import me.chenjr.autorecorder.textview.StatusTextView;
 
 public class HomePageFragment extends Fragment {
     ServiceButton startRecordServiceBtn;
+    ServiceButton startShakeServiceBtn;
     ServiceButton startRecordBtn;
     StatusTextView recordServiceTv;
+    StatusTextView shakeServiceTv;
     boolean isRecording = false;
     boolean recordServiceRunning = false;
+    boolean isShakeable = false;
     private ServiceStatusReceiver receiver ;
 
 
@@ -75,6 +79,26 @@ public class HomePageFragment extends Fragment {
 
         }
     };
+    View.OnClickListener btn_shake_service_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ServiceButton btn = (ServiceButton) v;
+
+            if (!isShakeable) {
+                getActivity().startService(new Intent(getContext(), ShakeService.class));
+
+
+
+            } else {
+
+                getActivity().stopService(new Intent(getContext(), ShakeService.class));
+
+            }
+            isShakeable = !isShakeable ;
+
+
+        }
+    };
     public Intent createNewActionIntent(int action){
         Intent newIntent  = new Intent(getContext(), RecordService.class);
         newIntent.putExtra(RecordService.ACTION_INTENT_KEY,action);
@@ -82,27 +106,42 @@ public class HomePageFragment extends Fragment {
     }
 
 
+    public void refreshViews(int status){
+        isRecording = (status & RecordService.STATUS_RECORDING) !=0;
+        recordServiceRunning = (status & RecordService.STATUS_SERVICE_STARTED) !=0;
+
+        recordServiceTv.updateStatus(recordServiceRunning);
+        startRecordServiceBtn.updateStatus(recordServiceRunning);
+        startRecordBtn.updateStatus(isRecording);
+
+    }
+
+    public void refreshViews(boolean shakeable){
+
+        isShakeable = shakeable;
+        startShakeServiceBtn.updateStatus(isShakeable);
+        shakeServiceTv.updateStatus(isShakeable);
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        startShakeServiceBtn = view.findViewById(R.id.frag_home_btn_shake_service);
         startRecordServiceBtn = view.findViewById(R.id.frag_home_btn_record_service);
         recordServiceTv = view.findViewById(R.id.frag_home_tv_record_service_status);
+        shakeServiceTv = view.findViewById(R.id.frag_home_tv_shake_status);
         startRecordBtn = view.findViewById(R.id.frag_home_btn_record_ctrl);
+
+
+
         startRecordBtn.setOnClickListener(btn_record_ctrl_listener);
         startRecordServiceBtn.setOnClickListener(btn_record_service_listener);
+        startShakeServiceBtn.setOnClickListener(btn_shake_service_listener);
 
         return view;
-
-    }
-
-    public void refreshViews(int status){
-        isRecording = (status & RecordService.STATUS_RECORDING) !=0;
-        recordServiceRunning = (status & RecordService.STATUS_SERVICE_STARTED) !=0;
-        recordServiceTv.updateStatus(recordServiceRunning);
-        startRecordServiceBtn.updateStatus(recordServiceRunning);
-        startRecordBtn.updateStatus(isRecording);
 
     }
     @Override
@@ -119,9 +158,15 @@ public class HomePageFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            int status = intent.getIntExtra(RecordService.STATUS_INTENT_KEY,0);
-            Log.d("@ServiceStatusReceiver", "onReceive: "+status);
-            refreshViews(status);
+            if (intent.getBooleanExtra("FROM_SHAKE",false)){
+                refreshViews(((intent.getIntExtra(ShakeService.STATUS_INTENT_KEY, 0)&1 )!= 0));
+            }else {
+                int status = intent.getIntExtra(RecordService.STATUS_INTENT_KEY,0);
+                Log.d("@ServiceStatusReceiver", "onReceive: "+status);
+                refreshViews(status);
+            }
+
+
         }
     }
 }

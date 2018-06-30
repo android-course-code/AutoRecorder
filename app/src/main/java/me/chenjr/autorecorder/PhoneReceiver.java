@@ -21,6 +21,7 @@ public class PhoneReceiver extends BroadcastReceiver {
             if(sp.getBoolean("enable_call_auto_record",false))
                 return;
             Intent intent = new Intent(mContext,RecordService.class);
+            intent.putExtra(RecordService.FROM_CALL,true);
             super.onCallStateChanged(state, incomingNumber);
             switch (state) {
 
@@ -58,7 +59,7 @@ public class PhoneReceiver extends BroadcastReceiver {
         sp = context.getSharedPreferences(
                 context.getString(R.string.sharedpreference_filename), Context.MODE_PRIVATE);
 
-        if(sp.getBoolean("enable_call_auto_record",false))
+        if(!sp.getBoolean("enable_call_auto_record",false))
             return;
         // 如果是去电
         if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
@@ -68,6 +69,7 @@ public class PhoneReceiver extends BroadcastReceiver {
                 Intent intent_start = new Intent(mContext,RecordService.class);
                 intent_start.putExtra(RecordService.ACTION_INTENT_KEY,RecordService.START_RECORD);
                 intent_start.putExtra(RecordService.EXTRA_PHONE_NUMBER,phoneNumber);
+                intent.putExtra(RecordService.FROM_CALL,true);
                 context.startService(intent_start);
             }
         } else {
